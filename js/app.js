@@ -7,6 +7,20 @@ var userCanClick = true;
 var timer = null;
 
 function onReady () {
+	populateGame();
+
+	//when new game button is clicked, reload the game-board
+	$("#new-game").click(function() {
+		window.location.reload();
+	});
+
+	startTimer();
+
+	//hides the winning message until user wins the game
+	$("#win-message").hide();
+}
+
+function populateGame() {
 	//makes the array of pictures
 	for (var i = 1; i < 33; i++) {
 		pics.push(i);
@@ -16,9 +30,6 @@ function onReady () {
 	pics = _.shuffle(pics).slice(0, 8);
 	pics = pics.concat(pics);
 	pics = _.shuffle(pics);
-
-	//hides the winning message until user wins the game
-	$("#win-message").hide();
 
 	//populate the game-board with pictures
 	var ul = $("#tiles");
@@ -33,13 +44,9 @@ function onReady () {
 		newLI.append(newImg);
 		ul.append(newLI);
 	}
+}
 
-	//when new game button is clicked, reload the game-board
-	$("#new-game").click(function() {
-		window.location.reload();
-	});
-
-	//starts game timer immediately when it is a new game
+function startTimer() {
 	var startTime = _.now();
 	timer = window.setInterval(function() {
 		$("#current-time").html(Math.floor((_.now() - startTime) / 1000));
@@ -56,7 +63,7 @@ function onTileClick() {
 		//makes sure that no other tile is currently selected
 		if (firstTile == null) {
 			firstTile = $(this);
-		//makes sure the the tile is not already flipped or selected  or any face up
+			//makes sure the the tile is not already flipped or selected  or any face up
 		} else {
 			userCanClick = false;
 
@@ -81,12 +88,12 @@ function onTileClick() {
 				if ((remaining - 1) == 0) {
 					clearInterval(timer);
 					$("#win-message").show();
-				//if game is not won, then tiles stay flipped & player can continue to play
+					//if game is not won, then tiles stay flipped & player can continue to play
 				} else {
 					firstTile = null;
 					userCanClick = true;
 				}
-			//when there isn't a match
+				//when there isn't a match
 			} else {
 				//increment mismatch counter
 				var mismatchElement = $("#mismatches");
@@ -110,7 +117,7 @@ function flipCards() {
 	firstTile.data("flipped", false);
 	firstTile.removeClass("mismatched");
 	firstTile.removeClass("selected");
-	
+
 	secondTile.attr("src", "img/tile-back.png");
 	secondTile.data("flipped", false);
 	secondTile.removeClass("mismatched");
