@@ -3,7 +3,7 @@
 var firstTile = null;
 var secondTile = null;
 var pics = [];
-var userCanClick = true;
+var clickable = true;
 var timer = null;
 
 function onReady () {
@@ -55,18 +55,15 @@ function startTimer() {
 
 function onTileClick() {
 	//if tile is not flipped, users can click on it to flip it
-	if (userCanClick && !$(this).data("flipped")) {
+	if (clickable && !$(this).data("flipped")) {
 		$(this).attr("src", "img/tile" + $(this).data("number") + ".jpg");
 		$(this).data("flipped", true);
 		$(this).addClass("selected");
 
-		//makes sure that no other tile is currently selected
 		if (firstTile == null) {
 			firstTile = $(this);
-			//makes sure the the tile is not already flipped or selected  or any face up
 		} else {
-			userCanClick = false;
-
+			clickable = false;
 			//when there is a match
 			if (firstTile.data("number") == $(this).data("number")) {
 				//increment match counter
@@ -75,9 +72,9 @@ function onTileClick() {
 				matchElement.html(matches + 1);
 
 				//also decrements the pairs remaining counter
-				var pairsremainingElement = $("#remaining");
-				var remaining = parseInt(pairsremainingElement.html());
-				pairsremainingElement.html(remaining - 1);
+				var pairsRemaining = $("#remaining");
+				var remaining = parseInt(pairsRemaining.html());
+				pairsRemaining.html(remaining - 1);
 
 				firstTile.removeClass("selected");
 				$(this).removeClass("selected");
@@ -88,17 +85,17 @@ function onTileClick() {
 				if ((remaining - 1) == 0) {
 					clearInterval(timer);
 					$("#win-message").show();
-					//if game is not won, then tiles stay flipped & player can continue to play
+				//if game is not won, then tiles stay flipped & player can continue to play
 				} else {
 					firstTile = null;
-					userCanClick = true;
+					clickable = true;
 				}
-				//when there isn't a match
+			//when there isn't a match
 			} else {
 				//increment mismatch counter
-				var mismatchElement = $("#mismatches");
-				var mismatches = parseInt(mismatchElement.html());
-				mismatchElement.html(mismatches + 1);
+				var pairsMismatched = $("#mismatches");
+				var mismatches = parseInt(pairsMismatched.html());
+				pairsMismatched.html(mismatches + 1);
 
 				secondTile = $(this);
 
@@ -125,7 +122,7 @@ function flipCards() {
 
 	firstTile = null;
 	secondTile = null;
-	userCanClick = true;
+	clickable = true;
 }
 
 $(onReady);
