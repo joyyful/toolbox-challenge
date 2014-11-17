@@ -77,3 +77,13 @@ main {
 #tiles {
 	cursor:pointer;
 }
+
+@media(max-width: 980px) {
+	.tiles li {
+		width: 24%
+	}
+
+	.game-info p {
+		font-size: 10px;
+	}
+}
